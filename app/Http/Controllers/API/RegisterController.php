@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRegistrationRequest;
+use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Traits\ResponseMessageTrait;
 
@@ -19,8 +20,9 @@ class RegisterController extends Controller
     }
     public function view()
     {
+        $users = User::all();
         $message = $this->responseMessage("Hedding", "Message Body");
-        return response()->api(true, $message, "nulllaaa", 222);
+        return response()->api(true, $message, $users, 201);
     }
     public function store(UserRegistrationRequest $request)
     {

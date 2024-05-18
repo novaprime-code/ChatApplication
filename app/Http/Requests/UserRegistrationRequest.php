@@ -25,6 +25,10 @@ class UserRegistrationRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
+            'phone_number' => 'required|string|max:255|unique:users',
+            'address' => 'required|string|max:255',
+            'gender' => 'required|string|max:255|in:male,female,Male,Female',
+            'dob' => 'required|date|max:255',
         ];
 
     }

@@ -16,9 +16,14 @@ class UserRepository implements UserRepositoryInterface
         DB::beginTransaction();
         try {
             User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'name' => $request['name'],
+                'email' => $request['email'],
+                'password' => Hash::make($request['password']),
+                'phone_number' => $request['phone_number'],
+                'address' => $request['address'],
+                'dob' => $request['dob'],
+                'gender' => $request['gender'],
+
             ]);
             DB::commit();
             return true;
