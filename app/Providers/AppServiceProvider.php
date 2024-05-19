@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -12,6 +15,10 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
+        $this->app->bind(
+            UserRepositoryInterface::class,
+            UserRepository::class
+        );
     }
 
     /**
@@ -19,6 +26,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Response::macro('api', function ($success, $message, $data = null, $statusCode = 200) {
+            return response()->json([
+                'success' => $success,
+                'message' => $message,
+                'data' => $data,
+            ], $statusCode);
+        });
+
     }
 }
