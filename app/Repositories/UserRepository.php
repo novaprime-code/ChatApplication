@@ -34,4 +34,26 @@ class UserRepository implements UserRepositoryInterface
         }
 
     }
+
+    public function update($request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $user = User::find($id);
+            $user->update([
+                'name' => $request['name'],
+                'email' => $request['email'],
+                'phone_number' => $request['phone_number'],
+                'address' => $request['address'],
+                'dob' => $request['dob'],
+                'gender' => $request['gender'],
+            ]);
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return false;
+        }
+    }
 }
