@@ -35,6 +35,7 @@ return [
     ],
     'channels' => [
         'chat.{chatId}' => \App\Broadcasting\ChatChannel::class,
+        'video-call.{callId}' => \App\Broadcasting\VideoCallChannel::class,
     ],
 
     /*

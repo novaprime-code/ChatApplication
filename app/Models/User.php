@@ -55,4 +55,12 @@ class User extends Authenticatable
                 $query->where('receiver_id', $this->id);
             });
     }
+
+    public function videoCalls()
+    {
+        return $this->hasMany(VideoCall::class, 'initiator_id')
+            ->orWhereHas('videoCalls', function ($query) {
+                $query->where('recipient_id', $this->id);
+            });
+    }
 }

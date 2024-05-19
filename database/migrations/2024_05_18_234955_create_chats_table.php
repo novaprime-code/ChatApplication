@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('sender_id');
             $table->foreign('sender_id')->references('id')->on('users')->onDelete(null);
-            $table->text('message');
+            $table->text('message')->nullable();
             $table->string('status')->default('unread');
             $table->timestamp('read_at')->nullable();
             $table->unsignedBigInteger('receiver_id');
