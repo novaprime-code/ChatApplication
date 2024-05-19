@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('null');
+            $table->foreignId('user_id')->constrained()->onDelete(null);
             $table->text('message');
             $table->string('status')->default('unread');
             $table->timestamp('read_at')->nullable();
             $table->unsignedBigInteger('receiver_id');
-            $table->foreign('receiver_id')->references('id')->on('users')->onDelete('null');
+            $table->foreign('receiver_id')->references('id')->on('users')->onDelete(null);
             $table->timestamps();
             $table->softDeletes();
         });
