@@ -10,4 +10,6 @@ interface UserRepositoryInterface
     public function register($request);
 
     public function update($request, $id);
+
+    public function authUser($id);
 }

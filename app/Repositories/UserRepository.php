@@ -72,4 +72,21 @@ class UserRepository implements UserRepositoryInterface
             return false;
         }
     }
+
+    public function authUser($id)
+    {
+
+        DB::beginTransaction();
+        try {
+            $user = User::findOrFail($id);
+
+            DB::commit();
+            return $user;
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return false;
+
+        }
+    }
 }
