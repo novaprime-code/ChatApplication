@@ -33,6 +33,10 @@ return [
             'enable_statistics' => true,
         ],
     ],
+    'channels' => [
+        'chat.{chatId}' => \App\Broadcasting\ChatChannel::class,
+        'video-call.{callId}' => \App\Broadcasting\VideoCallChannel::class,
+    ],
 
     /*
      * This class is responsible for finding the apps. The default provider

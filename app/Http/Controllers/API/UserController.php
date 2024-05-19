@@ -3,48 +3,66 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Traits\ResponseMessageTrait;
 
 class UserController extends Controller
 {
+    use ResponseMessageTrait;
+    private $userRepository;
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/home",
+     *     summary="Fetch All Users",
+     *     tags={"Users"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success response when user data is fetched successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="object",
+     *                 @OA\Property(property="head", type="string", example="Data Fetched"),
+     *                 @OA\Property(property="body", type="string", example="User data fetched successfully")
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/User")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error response when user data fetch fails",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="object",
+     *                 @OA\Property(property="head", type="string", example="Data Fetch Failed"),
+     *                 @OA\Property(property="body", type="string", example="User data fetch failed")
+     *             )
+     *         )
+     *     )
+     * )
      */
+
     public function index()
     {
-        //return test string json response
-        return response()->json(['message' => 'Hello World!'], 200);
+        if ($data = $this->userRepository->index()) {
+            $message = $this->responseMessage("Data Fetched", 'User data fetched successfully');
+            return response()->api(true, $message, $data, 200);
+        } else {
+            $message = $this->responseMessage("Data Fetched Failed", 'User data fetch failed');
+            return response()->api(false, $message, null, 500);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

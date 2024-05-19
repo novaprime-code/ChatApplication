@@ -2,48 +2,49 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
+use App\Models\Message;
+use App\Repositories\Interfaces\ChatRepositoryInterface;
+use App\Traits\ResponseMessageTrait;
+use Auth;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    use ResponseMessageTrait;
+    private $chatRepository;
+
+    public function __construct(ChatRepositoryInterface $chatRepository)
     {
-        //
+        $this->chatRepository = $chatRepository;
+    }
+    public function index($userId)
+    {
+        $messages = Message::where(function ($query) use ($userId) {
+            $query->where('user_id', Auth::id())->where('receiver_id', $userId);
+        })->orWhere(function ($query) use ($userId) {
+            $query->where('user_id', $userId)->where('receiver_id', Auth::id());
+        })->with('sender', 'receiver')->get();
+
+        return response()->json($messages);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'receiver_id' => 'required|exists:users,id',
+            'message' => 'required|string',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $message = Message::create([
+            'user_id' => Auth::id(),
+            'receiver_id' => $request->receiver_id,
+            'message' => $request->message,
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        broadcast(new MessageSent($message))->toOthers();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json(['message' => $message], 201);
     }
 }

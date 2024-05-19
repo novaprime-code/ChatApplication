@@ -47,4 +47,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function chats()
+    {
+        return $this->hasMany(Chat::class, 'sender_id')
+            ->orWhereHas('chats', function ($query) {
+                $query->where('receiver_id', $this->id);
+            });
+    }
+
+    public function videoCalls()
+    {
+        return $this->hasMany(VideoCall::class, 'initiator_id')
+            ->orWhereHas('videoCalls', function ($query) {
+                $query->where('recipient_id', $this->id);
+            });
+    }
 }

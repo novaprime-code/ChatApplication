@@ -18,12 +18,46 @@ class RegisterController extends Controller
     {
         $this->userRepository = $userRepository;
     }
-    public function view()
-    {
-        $users = User::all();
-        $message = $this->responseMessage("Hedding", "Message Body");
-        return response()->api(true, $message, $users, 201);
-    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/register",
+     *     summary="User Registration",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Request body for user registration",
+     *         @OA\JsonContent(ref="#/components/schemas/UserRegistrationRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success response when user registration is completed",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="object",
+     *                 @OA\Property(property="head", type="string", example="Registration Completed"),
+     *                 @OA\Property(property="body", type="string", example="Your account has been registered successfully.")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error response when user registration fails",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="object",
+     *                 @OA\Property(property="head", type="string", example="Error"),
+     *                 @OA\Property(property="body", type="string", example="User registration failed")
+     *             )
+     *         )
+     *     )
+     * )
+     */
+
     public function store(UserRegistrationRequest $request)
     {
         if ($this->userRepository->register($request->validated())) {

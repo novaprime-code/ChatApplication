@@ -14,11 +14,21 @@ class UserRegistrationRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
+/**
+ * @OA\Schema(
+ *     schema="UserRegistrationRequest",
+ *     type="object",
+ *     required={"name", "email", "password", "phone_number", "address", "gender", "dob"},
+ *     @OA\Property(property="name", type="string", example="John Doe"),
+ *     @OA\Property(property="email", type="string", format="email", example="john.doe@example.com"),
+ *     @OA\Property(property="password", type="string", format="password", example="password123"),
+ *     @OA\Property(property="phone_number", type="string", example="+1234567890"),
+ *     @OA\Property(property="address", type="string", example="123 Main St, Springfield, IL"),
+ *     @OA\Property(property="gender", type="string", enum={"male", "female", "Male", "Female"}, example="male"),
+ *     @OA\Property(property="dob", type="string", format="date", example="1990-01-01")
+ * )
+ */
+
     public function rules(): array
     {
         return [
