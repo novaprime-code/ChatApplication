@@ -3,48 +3,26 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Traits\ResponseMessageTrait;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    use ResponseMessageTrait;
+    private $userRepository;
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
     public function index()
     {
-        //return test string json response
-        return response()->json(['message' => 'Hello World!'], 200);
+        if ($data = $this->userRepository->index()) {
+            $message = $this->responseMessage("Data Fetched", 'User data fetched successfully');
+            return response()->api(true, $message, $data, 200);
+        } else {
+            $message = $this->responseMessage("Data Fetched Failed", 'User data fetch failed');
+            return response()->api(false, $message, null, 500);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

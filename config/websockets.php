@@ -33,6 +33,9 @@ return [
             'enable_statistics' => true,
         ],
     ],
+    'channels' => [
+        'chat.{chatId}' => \App\Broadcasting\ChatChannel::class,
+    ],
 
     /*
      * This class is responsible for finding the apps. The default provider

@@ -10,6 +10,22 @@ use Illuminate\Support\Facades\Log;
 
 class UserRepository implements UserRepositoryInterface
 {
+
+    public function index()
+    {
+
+        DB::beginTransaction();
+        try {
+            $user = User::all();
+            DB::commit();
+            return $user;
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return false;
+        }
+
+    }
     public function register($request)
     {
 

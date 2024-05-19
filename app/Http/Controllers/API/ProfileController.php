@@ -5,9 +5,11 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Repositories\UserRepository;
+use App\Traits\ResponseMessageTrait;
 
 class ProfileController extends Controller
 {
+    use ResponseMessageTrait;
     private $userRepository;
     public function __construct(UserRepository $userRepository)
     {
@@ -16,9 +18,11 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request, $id)
     {
         if ($this->userRepository->update($request->validated(), $id)) {
-            return response()->api(true, 'Profile updated successfully');
+            $message = $this->responseMessage("Profile Updated", 'Profile updated successfully');
+            return response()->api(true, $message, null, 200);
         } else {
-            return response()->api(false, 'Profile update failed');
+            $message = $this->responseMessage('Update Failed', ' Profile update failed');
+            return response()->api(false, $message, null, 200);
         }
 
     }

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Events\MessageSent;
+use App\Events\NewChatMessage;
 use App\Http\Controllers\Controller;
-use App\Models\Message;
+use App\Models\Chat;
 use App\Repositories\Interfaces\ChatRepositoryInterface;
 use App\Traits\ResponseMessageTrait;
 use Auth;
@@ -19,32 +19,53 @@ class ChatController extends Controller
     {
         $this->chatRepository = $chatRepository;
     }
-    public function index($userId)
+    public function initChat(Request $request)
     {
-        $messages = Message::where(function ($query) use ($userId) {
-            $query->where('user_id', Auth::id())->where('receiver_id', $userId);
-        })->orWhere(function ($query) use ($userId) {
-            $query->where('user_id', $userId)->where('receiver_id', Auth::id());
-        })->with('sender', 'receiver')->get();
+        $validatedData = $request->validate([
+            'receiver_id' => 'required|exists:users,id',
+        ]);
 
-        return response()->json($messages);
+        $chat = Chat::create([
+            'sender_id' => Auth::id(),
+            'receiver_id' => $validatedData['receiver_id'],
+        ]);
+
+        return response()->json($chat);
     }
 
-    public function store(Request $request)
+    public function sendMessage(Request $request, $chatId)
     {
-        $request->validate([
-            'receiver_id' => 'required|exists:users,id',
+        $validatedData = $request->validate([
             'message' => 'required|string',
         ]);
 
-        $message = Message::create([
-            'user_id' => Auth::id(),
-            'receiver_id' => $request->receiver_id,
-            'message' => $request->message,
+        $chat = Chat::findOrFail($chatId);
+
+        if ($chat->sender_id !== Auth::id() && $chat->receiver_id !== Auth::id()) {
+            return response()->json(['message' => 'Not authorized to send messages in this chat'], 403);
+        }
+
+        $message = $chat->messages()->create([
+            'sender_id' => Auth::id(),
+            'receiver_id' => $chat->sender_id === Auth::id() ? $chat->receiver_id : $chat->sender_id,
+            'message' => $validatedData['message'],
         ]);
 
-        broadcast(new MessageSent($message))->toOthers();
+        event(new NewChatMessage($message));
 
-        return response()->json(['message' => $message], 201);
+        return response()->json($message);
+    }
+
+    public function getChatHistory($chatId)
+    {
+        $chat = Chat::findOrFail($chatId);
+
+        if ($chat->sender_id !== Auth::id() && $chat->receiver_id !== Auth::id()) {
+            return response()->json(['message' => 'Not authorized to view this chat'], 403);
+        }
+
+        $messages = $chat->messages()->with('sender', 'receiver')->get();
+
+        return response()->json($messages);
     }
 }

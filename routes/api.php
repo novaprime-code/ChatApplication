@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\ChatController;
+use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
@@ -25,9 +26,18 @@ Route::get('/home', [UserController::class, 'index']);
 
 Route::get('/register', [RegisterController::class, 'view']);
 Route::post('/register', [RegisterController::class, 'store']);
+Route::get('/users', [UserController::class, 'index']);
+Route::get('/update', [ProfileController::class, 'update']);
+
+Route::get('/messages/{userId}', [ChatController::class, 'index']);
+Route::post('/messages', [ChatController::class, 'store']);
+
+Route::post('/chats', [ChatController::class, 'initChat'])->middleware('auth:sanctum');
+Route::post('/chats/{chatId}/messages', [ChatController::class, 'sendMessage'])->middleware('auth:sanctum');
+Route::get('/chats/{chatId}/messages', [ChatController::class, 'getChatHistory'])->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/messages/{userId}', [ChatController::class, 'index']);
-    Route::post('/messages', [ChatController::class, 'store']);
+
+    //user profile
 
 });
