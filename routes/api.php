@@ -1,11 +1,10 @@
 <?php
 
+use App\Http\Controllers\API\ChatController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-// use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +26,8 @@ Route::get('/home', [UserController::class, 'index']);
 Route::get('/register', [RegisterController::class, 'view']);
 Route::post('/register', [RegisterController::class, 'store']);
 
-// Route::middleware('auth:sanctum')->group(function () {
-//     Route::get('/messages', [MessageController::class, 'index']);
-//     Route::post('/messages', [MessageController::class, 'store']);
-// });
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/messages/{userId}', [ChatController::class, 'index']);
+    Route::post('/messages', [ChatController::class, 'store']);
+
+});
