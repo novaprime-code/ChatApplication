@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::get('/register', [RegisterController::class, 'view']);
 Route::post('/register', [RegisterController::class, 'store']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -28,9 +27,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/me', [ProfileController::class, 'index']);
     Route::get('/update', [ProfileController::class, 'update']);
     Route::get('/users', [UserController::class, 'index']);
-
-    Route::get('/messages/{userId}', [ChatController::class, 'index']);
-    Route::post('/messages', [ChatController::class, 'store']);
 
     Route::post('/chats', [ChatController::class, 'initChat']);
     Route::post('/chats/{chatId}/messages', [ChatController::class, 'sendMessage']);

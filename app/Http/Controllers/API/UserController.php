@@ -14,6 +14,46 @@ class UserController extends Controller
     {
         $this->userRepository = $userRepository;
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/home",
+     *     summary="Fetch All Users",
+     *     tags={"Users"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success response when user data is fetched successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="object",
+     *                 @OA\Property(property="head", type="string", example="Data Fetched"),
+     *                 @OA\Property(property="body", type="string", example="User data fetched successfully")
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/User")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error response when user data fetch fails",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="object",
+     *                 @OA\Property(property="head", type="string", example="Data Fetch Failed"),
+     *                 @OA\Property(property="body", type="string", example="User data fetch failed")
+     *             )
+     *         )
+     *     )
+     * )
+     */
+
     public function index()
     {
         if ($data = $this->userRepository->index()) {

@@ -10,6 +10,21 @@ use Illuminate\Support\Facades\Log;
 
 class UserRepository implements UserRepositoryInterface
 {
+/**
+ * @OA\Schema(
+ *     schema="User",
+ *     type="object",
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="name", type="string", example="John Doe"),
+ *     @OA\Property(property="email", type="string", format="email", example="john.doe@example.com"),
+ *     @OA\Property(property="phone_number", type="string", example="+1234567890"),
+ *     @OA\Property(property="address", type="string", example="123 Main St, Springfield, IL"),
+ *     @OA\Property(property="gender", type="string", example="male"),
+ *     @OA\Property(property="dob", type="string", format="date", example="1990-01-01"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", example="2023-01-01T00:00:00Z"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-01-01T00:00:00Z")
+ * )
+ */
 
     public function index()
     {
@@ -50,6 +65,20 @@ class UserRepository implements UserRepositoryInterface
         }
 
     }
+
+    /**
+     * @OA\Schema(
+     *     schema="ProfileUpdateRequest",
+     *     required={"name", "email", "password", "phone_number", "address", "gender", "dob"},
+     *     @OA\Property(property="name", type="string"),
+     *     @OA\Property(property="email", type="string", format="email"),
+     *     @OA\Property(property="password", type="string", format="password"),
+     *     @OA\Property(property="phone_number", type="string"),
+     *     @OA\Property(property="address", type="string"),
+     *     @OA\Property(property="gender", type="string", enum={"male", "female"}),
+     *     @OA\Property(property="dob", type="string", format="date"),
+     * )
+     */
 
     public function update($request, $id)
     {
