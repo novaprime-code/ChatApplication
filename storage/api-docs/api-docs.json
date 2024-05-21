@@ -7,12 +7,89 @@
     },
     "paths": {
         "/api/chats": {
+            "get": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Get all chats",
+                "operationId": "1ad2bc436ab5a502ecfea4ebd92d5318",
+                "responses": {
+                    "200": {
+                        "description": "List of chats",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID of the chat",
+                                                "type": "integer"
+                                            },
+                                            "sender_id": {
+                                                "description": "ID of the sender user",
+                                                "type": "integer"
+                                            },
+                                            "receiver_id": {
+                                                "description": "ID of the receiver user",
+                                                "type": "integer"
+                                            },
+                                            "created_at": {
+                                                "description": "Timestamp when the chat was created",
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "updated_at": {
+                                                "description": "Timestamp when the chat was last updated",
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "sender": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "ID of the sender user",
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "description": "Name of the sender user",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "receiver": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "ID of the receiver user",
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "description": "Name of the receiver user",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Chat"
                 ],
                 "summary": "Initialize Chat",
-                "operationId": "b0c35d6a68b5ffdfc888e6a745da47b0",
+                "operationId": "0713ae108f50452d4bdc0b7056c057f6",
                 "requestBody": {
                     "description": "Data required to initialize a chat",
                     "required": true,
@@ -101,13 +178,88 @@
                 ]
             }
         },
-        "/api/chats/{chatId}/messages": {
-            "get": {
+        "/api/chats/{chatId}": {
+            "delete": {
                 "tags": [
                     "Chat"
                 ],
+                "summary": "Delete Chat",
+                "operationId": "dbff649b89cf3278de6c0e374afe9e4a",
+                "parameters": [
+                    {
+                        "name": "chatId",
+                        "in": "path",
+                        "description": "ID of the chat",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Chat deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Chat deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not authorized to delete this chat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not authorized to delete this chat"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Chat not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Chat not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/chats/{chatId}/messages": {
+            "get": {
+                "tags": [
+                    "Message"
+                ],
                 "summary": "Get chat history",
-                "operationId": "3b1d58c3bb90861e829bcde5e429cf33",
+                "operationId": "4f55fa24f067a681879b94244c4e44b7",
                 "parameters": [
                     {
                         "name": "chatId",
@@ -202,10 +354,10 @@
             },
             "post": {
                 "tags": [
-                    "Chat"
+                    "Message"
                 ],
                 "summary": "Send a message in a chat",
-                "operationId": "f9657c8f76e36f548406897e7cd57733",
+                "operationId": "19ef0426ac01e93d153d450878a94c7c",
                 "parameters": [
                     {
                         "name": "chatId",
@@ -372,12 +524,12 @@
             }
         },
         "/api/update/{id}": {
-            "get": {
+            "patch": {
                 "tags": [
                     "Profile"
                 ],
                 "summary": "Update User Profile",
-                "operationId": "bf842cfb772bd788c998f8d7e77b1c69",
+                "operationId": "878717998c524db474fb041d70bb1521",
                 "parameters": [
                     {
                         "name": "id",

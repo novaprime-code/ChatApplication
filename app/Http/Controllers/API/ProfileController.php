@@ -70,7 +70,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * @OA\Get(
+     * @OA\Patch(
      *     path="/api/update/{id}",
      *     summary="Update User Profile",
      *     tags={"Profile"},

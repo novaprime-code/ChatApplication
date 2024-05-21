@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\ChatController;
+use App\Http\Controllers\API\MessageController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserController;
@@ -28,9 +29,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/update', [ProfileController::class, 'update']);
     Route::get('/users', [UserController::class, 'index']);
 
-    Route::post('/chats', [ChatController::class, 'initChat']);
-    Route::post('/chats/{chatId}/messages', [ChatController::class, 'sendMessage']);
-    Route::get('/chats/{chatId}/messages', [ChatController::class, 'getChatHistory']);
+    // Route::get('/chats', [ChatController::class, 'index']);
+    // Route::post('/chats', [ChatController::class, 'store']);
+    Route::apiResource('/chats', ChatController::class)->only('index', 'store', 'destroy');
+    Route::apiResource('/chat/{chatId}/messages', MessageController::class)->only('index', 'store');
+
+    // Route::post('/chats/{chatId}/messages', [ChatController::class, 'store']);
+    // Route::get('/chats/{chatId}/messages', [ChatController::class, 'index']);
 
     Route::post('/video-calls', [VideoCallController::class, 'initiateCall']);
     Route::post('/video-calls/{callId}/accept', [VideoCallController::class, 'acceptCall']);
