@@ -13,12 +13,6 @@ use Illuminate\Http\Request;
 class ChatController extends Controller
 {
     use ResponseMessageTrait;
-    private $chatRepository;
-
-    public function __construct(ChatRepositoryInterface $chatRepository)
-    {
-        $this->chatRepository = $chatRepository;
-    }
 
     /**
      * @OA\Post(
