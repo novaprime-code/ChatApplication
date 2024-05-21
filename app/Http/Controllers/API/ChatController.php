@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\MessageSent;
 use App\Events\NewChatMessage;
 use App\Http\Controllers\Controller;
 use App\Models\Chat;
-use App\Repositories\Interfaces\ChatRepositoryInterface;
 use App\Traits\ResponseMessageTrait;
 use Auth;
 use Illuminate\Http\Request;
@@ -122,8 +122,7 @@ class ChatController extends Controller
             'receiver_id' => $chat->sender_id === Auth::id() ? $chat->receiver_id : $chat->sender_id,
             'message' => $validatedData['message'],
         ]);
-
-        event(new NewChatMessage($message));
+        event(new MessageSent($message));
 
         return response()->json($message);
     }
