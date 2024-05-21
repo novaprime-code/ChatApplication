@@ -24,10 +24,10 @@ Route::post('/register', [RegisterController::class, 'store']);
 Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/home', [UserController::class, 'index'])->name('home');
+    Route::get('/users', [UserController::class, 'index']);
 
     Route::get('/me', [ProfileController::class, 'index']);
     Route::get('/update', [ProfileController::class, 'update']);
-    Route::get('/users', [UserController::class, 'index']);
 
     // Route::get('/chats', [ChatController::class, 'index']);
     // Route::post('/chats', [ChatController::class, 'store']);

@@ -20,7 +20,7 @@ class ChatResource extends JsonResource
             'sender' => $this->sender->name,
             'receiver_id' => $this->receiver_id,
             'receiver' => $this->receiver->name,
-            'created_at' => $this->created_at,
+            'created_at' => $this->created_at->toDateTimeString(),
         ];
     }
 }
