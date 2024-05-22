@@ -6,12 +6,12 @@
 @endsection
 
 @section('content')
-    @if (auth()->user())
+    {{-- @if (auth()->user()) --}}
         <main-component :logged-in-user="{{ auth()->user() ? json_encode(auth()->user()) : 'null' }}"
                         pusher-key="{{ config('broadcasting.connections.pusher.key') }}"
                         pusher-cluster="{{ config('broadcasting.connections.pusher.options.cluster') }}">
         </main-component>
-    @else
-        <login-component></login-component>
-    @endif
+    {{-- @else
+        <login-component></login-component> --}}
+    {{-- @endif --}}
 @endsection

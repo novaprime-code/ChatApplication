@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Resources\UserResource;
 use App\Repositories\UserRepository;
 use App\Traits\ResponseMessageTrait;
 use Auth;
@@ -61,10 +62,10 @@ class ProfileController extends Controller
     {
         if ($me = $this->userRepository->authUser(Auth::id())) {
             $message = $this->responseMessage("Date Fetched", 'Profile fetched successfully');
-            return response()->api($me);
+            return response()->api(true, $message, new UserResource($me), 200);
         } else {
             $message = $this->responseMessage('Failed to Fetch ', ' Profile fetch failed');
-            return response()->api(false, $message, null, 200);
+            return response()->api(false, $message, null, 500);
         }
 
     }
