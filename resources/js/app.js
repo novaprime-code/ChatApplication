@@ -4,12 +4,11 @@ import MainComponent from "./components/MainComponent.vue";
 import UserListComponent from "./components/UserListComponent.vue";
 import ChatComponent from "./components/ChatComponent.vue";
 import VideoComponent from "./components/VideoComponent.vue";
-import LoginComponent from "./components/VideoComponent.vue";
+import LoginComponent from "./components/LoginComponent.vue";
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap";
+
 window.axios = axios;
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
@@ -38,10 +37,10 @@ const app = createApp({
 
 app.use(VueChatScroll);
 
-app.component("main-component", MainComponent);
 app.component("login-component", LoginComponent);
-app.component("user-list-component", UserListComponent);
-app.component("chat-component", ChatComponent);
-app.component("video-component", VideoComponent);
+// app.component("main-component", MainComponent);
+// app.component("user-list-component", UserListComponent);
+// app.component("chat-component", ChatComponent);
+// app.component("video-component", VideoComponent);
 
 app.mount("#app");

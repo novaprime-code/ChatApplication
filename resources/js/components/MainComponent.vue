@@ -8,11 +8,31 @@
       <div class="h-100">
         <div class="row m-0 p-0 h-100" v-if="!isCallAccepted">
           <user-list-component @showChat="showUserChat"></user-list-component>
-          <chat-component v-if="receiver" v-on:callAccepted="showVideo" :receiver="receiver" :sender="loggedInUser" :isCalling="isUserCalling"></chat-component>
+          <chat-component 
+            v-if="receiver" 
+            v-on:callAccepted="showVideo" 
+            :receiver="receiver" 
+            :sender="loggedInUser" 
+            :isCalling="isUserCalling">
+          </chat-component>
         </div>
-        <call-modal-component v-if="isUserCalling" v-on:callAccepted="showVideo" :caller="caller" :callReceiver="callReceiver" @declineCall="declineCall"></call-modal-component>
+        <call-modal-component 
+          v-if="isUserCalling" 
+          v-on:callAccepted="showVideo" 
+          :caller="caller" 
+          :callReceiver="callReceiver" 
+          @declineCall="declineCall">
+        </call-modal-component>
       </div>
-      <video-component v-if="isCallAccepted" v-on:endCall="endCall" :pusherKey="pusherKey" :pusherCluster="pusherCluster" :caller="caller" :callReceiver="callReceiver" :logged_user_id="loggedInUser"></video-component>
+      <video-component 
+        v-if="isCallAccepted" 
+        v-on:endCall="endCall" 
+        :pusherKey="pusherKey" 
+        :pusherCluster="pusherCluster" 
+        :caller="caller" 
+        :callReceiver="callReceiver" 
+        :logged_user_id="loggedInUser.id">
+      </video-component>
     </div>
   </div>
 </template>
@@ -23,48 +43,41 @@ import ChatComponent from './ChatComponent.vue';
 import UserListComponent from './UserListComponent.vue';
 import LoginComponent from './LoginComponent.vue';
 import axios from 'axios';
-import Echo from 'laravel-echo';
 
 export default {
   components: {
     CallModalComponent,
     ChatComponent,
     UserListComponent,
-    LoginComponent,
   },
-  props: ['loggedInUser', 'pusherKey', 'pusherCluster'],
+  props: ['loggedin_user','pusherKey', 'pusherCluster'],
   data() {
     return {
-      isLoggedIn: false,
+      loggedInUser: null,
       receiver: null,
       isUserCalling: false,
       caller: null,
       callReceiver: null,
       isCallAccepted: false,
-            showRegisterLink: true, // or false, depending on your requirements
-      showRegister: false, // or false, depending on your requirements
+      isCallAccepted: false,
     };
   },
   created() {
-    // ... (existing code)
     this.fetchLoggedInUser();
-
   },
   methods: {
-
     handleLogin() {
-      this.isLoggedIn = true;
+      this.fetchLoggedInUser(); // Fetch user data after login
     },
     async fetchLoggedInUser() {
       try {
         const response = await axios.get('/api/me');
-        console.log("Profile ME")
-        this.loggedin_user = response.data;
+        console.log("Profile ME", response.data);
+        this.loggedInUser = response.data;
       } catch (error) {
         console.error('Error fetching logged in user:', error);
       }
     },
-
     showUserChat(receiver) {
       this.receiver = receiver;
     },
@@ -89,19 +102,14 @@ export default {
         });
     },
   },
-computed: {
-  isLoggedIn() {
-    // Return a computed value based on some condition
-    return this.loggedInUser !== null;
-  },
-  showRegisterLink() {
-    // Return a computed value based on some condition
-    return !this.isLoggedIn;
-  },
-  showRegister() {
-    // Return a computed value based on some condition
-    return !this.isLoggedIn;
+  computed: {
+    isLoggedIn() {
+      return this.loggedInUser !== null;
+    },
   }
-}
 };
 </script>
+
+<style scoped>
+/* Add your styles here */
+</style>
