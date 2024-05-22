@@ -10,6 +10,7 @@ use App\Repositories\Interfaces\MessageRepositoryInterface;
 use DB;
 use Exception;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 
 class MessageRepository implements MessageRepositoryInterface
 {
@@ -32,26 +33,22 @@ class MessageRepository implements MessageRepositoryInterface
      * @return JsonResource
      */
     public function create(array $data): JsonResource
-    {
+    {Log::info($data);
         DB::beginTransaction();
         try {
-            $message = Message::create(
-                [
-                    'chat_id' => $data['chat_id'],
-                    'sender_id' => $data['sender_id'],
-                    'receiver_id' => $data['receiver_id'],
-                    'message' => $data['message'],
-                ]
-            );
+            $message = Message::create([
+                'chat_id' => $data['chat_id'],
+                'sender_id' => $data['sender_id'],
+                'receiver_id' => $data['receiver_id'],
+                'message' => $data['message'],
+            ]);
             event(new MessageSent($message));
             DB::commit();
             return new MessageResource($message);
         } catch (Exception $e) {
             DB::rollBack();
             throw new Exception($e->getMessage());
-        }
-
-    }
+        }}
 
     /**
      * Delete message

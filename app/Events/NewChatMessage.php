@@ -13,17 +13,28 @@ class NewChatMessage
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
+    public $receiverId;
+    public $senderId;
+    public $chatId;
 
     public function __construct(Message $message)
     {
-        $this->message = $message->load('sender', 'receiver');
-
+        $this->receiverId = $message->receiver_id;
+        $this->senderId = $message->sender_id;
+        $this->message = $message;
+        $this->msg = $message->message;
+        $this->chatId = $message->chat_id;
     }
 
     public function broadcastOn()
     {
-        return new PrivateChannel('chat.' . $this->message->chat_id);
+        return new PrivateChannel('receiveMessage.' . $this->receiveMessage);
 
+    }
+
+    public function broadcastAs()
+    {
+        return 'receiveMessage';
     }
 
     public function broadcastWith()
@@ -37,8 +48,5 @@ class NewChatMessage
             'created_at' => $this->message->created_at->toDateTimeString(),
         ];
     }
-    public function broadcastAs()
-    {
-        return 'newMessage';
-    }
+
 }

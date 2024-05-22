@@ -20,11 +20,12 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::post('/register', [RegisterController::class, 'store']);
+Route::get('/users', [UserController::class, 'index']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/home', [UserController::class, 'index'])->name('home');
-    Route::get('/users', [UserController::class, 'index']);
+
 
     Route::get('/me', [ProfileController::class, 'index']);
     Route::get('/update', [ProfileController::class, 'update']);

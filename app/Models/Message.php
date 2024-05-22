@@ -10,6 +10,7 @@ class Message extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
+        'chat_id',
         'sender_id',
         'message',
         'status',

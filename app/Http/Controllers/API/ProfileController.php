@@ -61,7 +61,7 @@ class ProfileController extends Controller
     {
         if ($me = $this->userRepository->authUser(Auth::id())) {
             $message = $this->responseMessage("Date Fetched", 'Profile fetched successfully');
-            return response()->api(true, $message, $me, 200);
+            return response()->api($me);
         } else {
             $message = $this->responseMessage('Failed to Fetch ', ' Profile fetch failed');
             return response()->api(false, $message, null, 200);

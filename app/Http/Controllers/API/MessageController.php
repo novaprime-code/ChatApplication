@@ -73,14 +73,15 @@ class MessageController extends Controller
         if ($chat->sender_id !== Auth::id() && $chat->receiver_id !== Auth::id()) {
             return response()->json(['message' => 'Not authorized to send messages in this chat'], 403);
         }
-        if ($message = $this->messageRepository->create([
-            'chat_id' => $chatId,
+        $validatedData = [
+            'chat_id' => intval($chatId),
             'sender_id' => Auth::id(),
             'receiver_id' => $chat->sender_id === Auth::id() ? $chat->receiver_id : $chat->sender_id,
             'message' => $validatedData['message'],
-        ])) {
-            $chat = $this->responseMessage("Message Sent", 'Your message was sent successfully');
-            return response()->api(true, $message, $chat, 200);
+        ];
+        if ($data = $this->messageRepository->create($validatedData)) {
+            $message = $this->responseMessage("Message Sent", 'Your message was sent successfully');
+            return response()->api(true, $message, $data, 200);
         } else {
             $message = $this->responseMessage("Message Sent Failed", 'Your message was not sent');
             return response()->api(false, $message, null, 500);
