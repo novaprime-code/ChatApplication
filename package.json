@@ -7,7 +7,17 @@
     },
     "devDependencies": {
         "axios": "^1.6.4",
+        "laravel-echo": "^1.16.1",
         "laravel-vite-plugin": "^1.0.0",
+        "pusher-js": "^8.4.0-rc2",
         "vite": "^5.0.0"
+    },
+    "dependencies": {
+        "@popperjs/core": "^2.11.8",
+        "@vitejs/plugin-vue": "^5.0.4",
+        "bootstrap": "^5.3.3",
+        "simple-peer": "^9.11.1",
+        "vue": "^3.4.27",
+        "vue3-chat-scroll": "^0.2.0"
     }
 }

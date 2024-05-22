@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Traits\ResponseMessageTrait;
 
@@ -58,7 +59,7 @@ class UserController extends Controller
     {
         if ($data = $this->userRepository->index()) {
             $message = $this->responseMessage("Data Fetched", 'User data fetched successfully');
-            return response()->api(true, $message, $data, 200);
+            return response()->api(true, $message, UserResource::collection($data), 200);
         } else {
             $message = $this->responseMessage("Data Fetched Failed", 'User data fetch failed');
             return response()->api(false, $message, null, 500);

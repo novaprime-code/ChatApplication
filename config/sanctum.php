@@ -35,7 +35,7 @@ return [
 
     'guard' => ['web'],
     //prefix for the api
-    'prefix' => 'api/',
+    'prefix' => 'api/sanctum',
     /*
     |--------------------------------------------------------------------------
     | Expiration Minutes

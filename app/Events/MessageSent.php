@@ -3,9 +3,8 @@
 namespace App\Events;
 
 use App\Models\Message;
-use Illuminate\Broadcasting\Channel;
+use BeyondCode\LaravelWebSockets\WebSockets\Channels\PrivateChannel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -17,7 +16,7 @@ class MessageSent
 
     public function __construct(Message $message)
     {
-        $this->message = $message->load('sender', 'receiver');
+        $this->message = $message->message;
 
     }
 
@@ -31,10 +30,14 @@ class MessageSent
     {
         return [
             'id' => $this->message->id,
-            'user_id' => $this->message->user_id,
             'message' => $this->message->message,
-            'user_name' => $this->message->user->name,
+            'sender' => $this->message->sender->name,
+            'receiver' => $this->message->receiver->name,
             'created_at' => $this->message->created_at->toDateTimeString(),
         ];
+    }
+    public function broadcastAs()
+    {
+        return 'chat.' . $this->message->receiver_id;
     }
 }
